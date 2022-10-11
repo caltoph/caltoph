@@ -4,7 +4,7 @@ ARG OS="linux"
 FROM golang:1.19-alpine as builder
 WORKDIR /build
 COPY . .
-RUN CGO_ENABLED=0 go build
+RUN CGO_ENABLED=0 go build ./cmd/caltoph
 
 FROM alpine:latest
 WORKDIR /app
