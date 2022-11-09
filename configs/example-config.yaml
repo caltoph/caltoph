@@ -1,0 +1,2 @@
+postgres_uri: "postgres://user:password@host/database"
+loglevel: debug #debug|info|warning

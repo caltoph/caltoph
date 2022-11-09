@@ -1,0 +1,126 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Caltoph API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "basePath": "/_caltoph/v1",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "summary": "Perform a login action and create a session",
+                "parameters": [
+                    {
+                        "description": "Authorize data from oidc provider",
+                        "name": "Login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.loginBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.loginReturn"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/api.errormsg"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/api.errormsg"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/oidc_servers": {
+            "get": {
+                "summary": "Get oidc authentication providers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/config.Oidc_provider"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Get app health",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.errormsg": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.loginBody": {
+            "type": "object",
+            "required": [
+                "code",
+                "provider"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.loginReturn": {
+            "type": "object",
+            "properties": {
+                "session_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Oidc_provider": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "url_authorize": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ package health
 
 import (
 	"caltoph/internal/db"
+	"strings"
 	"time"
 )
 
@@ -20,6 +21,19 @@ func checkDbHealth() {
 	}
 }
 
-func GetDbHealth() bool {
+func getDbHealth() bool {
 	return dbHealth
+}
+
+func GetHealth() (bool, string) {
+	var sb strings.Builder
+	var error = false
+	if !getDbHealth() {
+		error = true
+		sb.WriteString("CAN'T REACH DATABASE\n")
+	}
+	if error {
+		return false, sb.String()
+	}
+	return true, "HEALTHY"
 }
