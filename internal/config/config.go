@@ -13,6 +13,7 @@ type ServerConfig struct {
 	Postgres_uri  string          `yaml:"postgres_uri"`
 	Loglevel      string          `yaml:"loglevel"`
 	Oidc_provider []Oidc_provider `yaml:"oidc_providers" json:"oidc_providers"`
+	DevMode       bool            `yaml:"dev_mode"`
 }
 
 type Oidc_provider struct {

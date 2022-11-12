@@ -58,6 +58,9 @@ func Init() {
 		providers[a.Name] = o
 	}
 	//Initializer gin
+	if !config.Config.DevMode {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	router := gin.Default()
 	router.GET("/_caltoph/v1/health", getHealth)
 	router.GET("/_caltoph/v1/auth/oidc_servers", getOidc_Servers)

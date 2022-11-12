@@ -15,7 +15,7 @@ var ErrorLogger *log.Logger
 var FatalLogger *log.Logger
 
 func Init() {
-	//Initialize loggers that are always active
+	//Initialize all loggers
 	DebugLogger = log.New(os.Stdout, "DEBUG: ", log.Ldate|log.Ltime|log.Lshortfile)
 	InfoLogger = log.New(os.Stdout, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	WarningLogger = log.New(os.Stdout, "WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
@@ -23,16 +23,21 @@ func Init() {
 	FatalLogger = log.New(os.Stdout, "FATAL: ", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
-func Init2(loglevel string) {
+func Init2(loglevel string, devmode bool) {
+	//Use loglevel debug
 	if strings.ToLower(loglevel) == "debug" {
 		fmt.Println("Using loglevel debug")
 		return
 	}
+
+	//Disable debug logger on loglevel info
 	if strings.ToLower(loglevel) == "info" {
 		DebugLogger.SetOutput(io.Discard)
 		fmt.Println("Using loglevel info")
 		return
 	}
+
+	//Disable debug and info logger on debug level warning
 	if strings.ToLower(loglevel) == "warning" {
 		DebugLogger.SetOutput(io.Discard)
 		InfoLogger.SetOutput(io.Discard)
@@ -40,10 +45,19 @@ func Init2(loglevel string) {
 		return
 	}
 
-	//If loglevel is not empty string now, it's not legal
+	//If loglevel is not empty string now, it's not legal. Return a warning and continue with setting default log level.
 	if strings.ToLower(loglevel) != "" {
 		WarningLogger.Println("logger: Provided loglevel is not a legal loglevel. Using DEBUG instead.")
+	}
+
+	if devmode {
+		fmt.Println("Using default loglevel for dev mode : debug")
 		return
 	}
-	fmt.Println("Using default loglevel")
+
+	if !devmode {
+		DebugLogger.SetOutput(io.Discard)
+		fmt.Println("Using default loglevel: info")
+		return
+	}
 }
